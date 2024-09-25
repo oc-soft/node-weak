@@ -84,6 +84,10 @@ Local<Object> GetEmitter(Local<Object> proxy) {
 NAN_PROPERTY_GETTER(WeakNamedPropertyGetter) {
   UNWRAP
   info.GetReturnValue().Set(dead ? Local<Value>() : Nan::Get(obj, property).ToLocalChecked());
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 }
 
 
@@ -91,23 +95,39 @@ NAN_PROPERTY_SETTER(WeakNamedPropertySetter) {
   UNWRAP
   if (!dead) Nan::Set(obj, property, value);
   info.GetReturnValue().Set(value);
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 }
 
 
 NAN_PROPERTY_QUERY(WeakNamedPropertyQuery) {
   info.GetReturnValue().Set(None);
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 }
 
 
 NAN_PROPERTY_DELETER(WeakNamedPropertyDeleter) {
   UNWRAP
   info.GetReturnValue().Set(!dead && Nan::Delete(obj, property).FromJust());
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 }
 
 
 NAN_INDEX_GETTER(WeakIndexedPropertyGetter) {
   UNWRAP
   info.GetReturnValue().Set(dead ? Local<Value>() : Nan::Get(obj, index).ToLocalChecked());
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 }
 
 
@@ -115,17 +135,29 @@ NAN_INDEX_SETTER(WeakIndexedPropertySetter) {
   UNWRAP
   if (!dead) Nan::Set(obj, index, value);
   info.GetReturnValue().Set(value);
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 }
 
 
 NAN_INDEX_QUERY(WeakIndexedPropertyQuery) {
   info.GetReturnValue().Set(None);
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 }
 
 
 NAN_INDEX_DELETER(WeakIndexedPropertyDeleter) {
   UNWRAP
   info.GetReturnValue().Set(!dead && Nan::Delete(obj, index).FromJust());
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 }
 
 NAN_PROPERTY_ENUMERATOR(WeakNamedPropertyEnumerator) {
@@ -141,6 +173,10 @@ NAN_INDEX_ENUMERATOR(WeakIndexedPropertyEnumerator) {
   UNWRAP
 #if NODE_MAJOR_VERSION >= 7
   info.GetReturnValue().Set(dead ? Nan::New<Array>(0) : obj->GetPropertyNames(Nan::GetCurrentContext(), KeyCollectionMode::kIncludePrototypes, static_cast<PropertyFilter> (ONLY_ENUMERABLE | SKIP_STRINGS | SKIP_SYMBOLS), IndexFilter::kIncludeIndices).ToLocalChecked());
+#if defined(V8_MAJOR_VERSION) && (V8_MAJOR_VERSION > 12 ||                     \
+  (V8_MAJOR_VERSION == 12 && defined(V8_MINOR_VERSION) && V8_MINOR_VERSION > 4))
+  return v8::Intercepted::kNo;
+#endif
 #else
   info.GetReturnValue().Set(dead ? Nan::New<Array>(0) : Nan::GetPropertyNames(obj).ToLocalChecked());
 #endif

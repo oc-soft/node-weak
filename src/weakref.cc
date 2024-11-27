@@ -322,4 +322,4 @@ NAN_MODULE_INIT(Initialize) {
 
 } // anonymous namespace
 
-NODE_MODULE(weakref, Initialize)
+NAN_MODULE_WORKER_ENABLED(weakref, Initialize)
